@@ -1,6 +1,6 @@
-# f = open("input.txt", "r")
+f = open("input.txt", "r")
 # f = open("example.txt", "r")
-f = open("example2.txt", "r")
+# f = open("example2.txt", "r")
 inp = f.readlines()
 f.close()
 
@@ -18,29 +18,27 @@ for i in range(1,len(joltages)):
 prod = diffs.count(1) * diffs.count(3)
 
 # part 2
-triples = []
-doubles = []
-singles = []
-prevIsTriple = False
-prevIsDouble = False
-for i in range(len(diffs)-2):
-    if(diffs[i+1] == 1 and diffs[i+2] == 1 and diffs[i+3] == 1 and diffs[i+4] == 1):
-        # then three replaceable entries
-        triples.append(joltages[i+2])
-        prevIsDouble = False
-        prevIsTriple = True
-    elif(diffs[i+1] == 1 and diffs[i+2] == 1 and diffs[i+3] == 1 and prevIsTriple == False):
-        # then two replaceable entries
-        doubles.append(joltages[i+2])
-        prevIsDouble = True
-        prevIsTriple = False
-    elif(diffs[i+1] == 1 and diffs[i+2] == 1 and prevIsDouble == False and prevIsTriple == False):
-        # then one replacable entries
-        singles.append(joltages[i+2])
-        prevIsDouble = False
-        prevIsTriple = False
-    else:
-        prevIsDouble = False
-        prevIsTriple = False
+
+class CombinationsStore:
+    def __init__(self):
+        self.combinations = {-1:1}
+        self.combinations.update({0:1})
+        self.combinations.update({1:2})
+        self.combinations.update({2:4})
+        self.combinations.update({3:7})
+        self.combinations.update({4:10})
         
-orders = 7*len(triples)*4*len(doubles)*2*len(singles)
+s = CombinationsStore()
+
+i = 0
+combis = 1
+while(i < len(diffs)):
+    j = 0
+    while(diffs[i+j] == 1):
+        j = j +1
+    combis = combis * s.combinations.get(j-1)
+    if(j>0):
+        i = i +j
+    else:
+        i = i +1
+print(combis)
